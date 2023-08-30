@@ -61,7 +61,7 @@ docker run -it --rm -v /input_bids_directory:/bids_dataset -v /input_bids_direct
 ####   optional argument:
 -   `--participant_label [str]`: A space delimited list of participant identifiers or a single identifier (the sub- prefix can be removed)
 - `--skip_bids_validator`: skips bids validation.
-- `--n_cpus [int]`: Number of CPU cores available to use. ** For parallel mode, default values of n_cpus = min(number of subjects, number of cores)** (type `htop` in terminal to check the actual number of CPU cores in your computer). 
+- `--n_cpus [int]`: Number of CPU cores available to use. **For parallel mode, default values of n_cpus = min(number of subjects, number of cores)** (type `htop` in terminal to check the actual number of CPU cores in your computer). 
 - `-v`: show program's version number and exit
 
 ## Output explanation
