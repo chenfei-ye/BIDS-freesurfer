@@ -4,6 +4,9 @@
 - `desikan_T1w`：Desikan-Killiany Atlas (?h.aparc.annot) included inside FreeSurfer
 - `destrieux_T1w`: Destrieux Atlas (?h.aparc.a2009s.annot) Atlas (?h.aparc.annot) included inside FreeSurfer
 - `hcpmmp_T1w` : HCP-MMP1.0 parcellation by [Glasser et al. (Nature)](http://www.nature.com/nature/journal/v536/n7615/full/nature18933.html). See details [here](https://cjneurolab.org/2016/11/22/hcp-mmp1-0-volumetric-nifti-masks-in-native-structural-space/).
+-   `schaefer100_T1w`: Multiscale local-global functional atlas from Schaefer and colleagues: 100-node resolution
+-   `schaefer200_T1w`: Multiscale local-global functional atlas from Schaefer and colleagues: 200-node resolution
+-   `schaefer400_T1w`: Multiscale local-global functional atlas from Schaefer and colleagues: 400-node resolution
 
 
 ## Reference
@@ -15,3 +18,4 @@ Glasser, Matthew F. A multi-modal parcellation of human cerebral cortex. Nature 
 
 Mills, Kathryn (2016): HCP-MMP1.0 projected on fsaverage. figshare. [https://dx.doi.org/10.6084/m9.figshare.3498446.v2](https://dx.doi.org/10.6084/m9.figshare.3498446.v2) Retrieved: 08 57, Nov 22, 2016 (GMT)
 
+Yeo BT, Krienen FM, Sepulcre J, Sabuncu MR, Lashkari D, Hollinshead M, Roffman JL, Smoller JW, Zöllei L, Polimeni JR, Fischl B, Liu H, Buckner RL. The organization of the human cerebral cortex estimated by intrinsic functional connectivity. J Neurophysiol. 2011 Sep;106(3):1125-65. [doi: 10.1152/jn.00338.2011.](https://journals.physiology.org/doi/full/10.1152/jn.00338.2011#)

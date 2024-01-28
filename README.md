@@ -5,6 +5,7 @@
 [freesurfer 6.0](https://surfer.nmr.mgh.harvard.edu/) brain parcellation on BIDS-format MRI-T1w images, including:
 - parallel brain parcellation for multiple subjects
 - mapping to [HCPMMP atlas](https://cjneurolab.org/2016/11/22/hcp-mmp1-0-volumetric-nifti-masks-in-native-structural-space/)
+- mapping to [Schaefer atlas](https://github.com/ThomasYeoLab/CBIG/tree/master/stable_projects/brain_parcellation/Schaefer2018_LocalGlobal/Parcellations/project_to_individual)
 - morphological metrics extraction (e.g., cortical thickness, subcortical volume, euler number)
 
 This pipeline was modified from [https://github.com/BIDS-Apps/freesurfer](https://github.com/BIDS-Apps/freesurfer).
@@ -42,9 +43,9 @@ docker run -it --rm -v /input_bids_directory:/bids_dataset -v /input_bids_direct
 docker run -it --rm --entrypoint python -v /input_bids_directory:/bids_dataset -v /input_bids_directory/derivatives/freesurfer:/outputs -v <localpath>/freesurfer_license.txt:/license.txt  bids-freesurfer:latest /run_fs_batch.py /bids_dataset /outputs participant --skip_bids_validator
 ```
 
-### mapping to hcpmmp atlas
+### mapping to hcpmmp and schaefer atlas
 ```
-docker run -it --rm --entrypoint python -v /input_bids_directory:/bids_dataset -v /<localpath>/freesurfer_license.txt:/license.txt bids-freesurfer:latest /hcpmmp_conv.py /bids_dataset participant 
+docker run -it --rm --entrypoint python -v /input_bids_directory:/bids_dataset -v /<localpath>/freesurfer_license.txt:/license.txt bids-freesurfer:latest /surf_conv.py /bids_dataset participant 
 ```
 
 ### morphological metrics extraction
@@ -66,7 +67,10 @@ docker run -it --rm -v /input_bids_directory:/bids_dataset -v /input_bids_direct
 
 ## Output explanation
 -  Default output directory: `bids_root/derivatives/freesurfer/sub-XX`
--  HCPMMP output directory: `bids_root/derivatives/freesurfer/sub-XX/mri/aparc.HCPMMP1+aseg.mgz` 
+-  HCPMMP output directory: `bids_root/derivatives/freesurfer/sub-XX/mri/native_hcpmmp360.mgz` 
+-  Schaefer100 output directory: `bids_root/derivatives/freesurfer/sub-XX/mri/native_schaefer100.mgz` 
+-  Schaefer200 output directory: `bids_root/derivatives/freesurfer/sub-XX/mri/native_schaefer200.mgz` 
+-  Schaefer400 output directory: `bids_root/derivatives/freesurfer/sub-XX/mri/native_schaefer400.mgz` 
 -  morphological metrics output directory: `input_bids_directory/derivatives/freesurfer/00_group2_stats_tables/`, including: 
 	-   `lh.aparc.thickness.tsv`  cortical thickness
 	-   `aseg.tsv`  subcortical volume
