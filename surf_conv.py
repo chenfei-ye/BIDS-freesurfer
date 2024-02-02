@@ -1,8 +1,8 @@
 # coding:utf8
 # Authere: Chenfei 
-# update Date:2024/01/28
-# version: surf_conv:v1.0
-# update: added Schaefer atlas
+# update Date:2024/02/02
+# version: surf_conv:v1.1
+# update: added Schaeferx7 and Schaeferx17 atlas
 # https://github.com/ThomasYeoLab/CBIG/tree/master/stable_projects/brain_parcellation/Schaefer2018_LocalGlobal/Parcellations/project_to_individual
 
 
@@ -31,9 +31,15 @@ def runSubject(freesurfer_dir, subject_label):
     parc_desikan_path = os.path.join(parc_image_path, 'aparc+aseg.mgz')
     parc_destrieux_path = os.path.join(parc_image_path, 'aparc.a2009s+aseg.mgz')
     parc_hcpmmp360_path = os.path.join(parc_image_path, 'aparc.HCPMMP1+aseg.mgz')
-    parc_schaefer100_path = os.path.join(parc_image_path, 'aparc.schaefer100+aseg.mgz')
-    parc_schaefer200_path = os.path.join(parc_image_path, 'aparc.schaefer200+aseg.mgz')
-    parc_schaefer400_path = os.path.join(parc_image_path, 'aparc.schaefer400+aseg.mgz')
+    parc_schaefer100x7_path = os.path.join(parc_image_path, 'aparc.schaefer100x7+aseg.mgz')
+    parc_schaefer200x7_path = os.path.join(parc_image_path, 'aparc.schaefer200x7+aseg.mgz')
+    parc_schaefer400x7_path = os.path.join(parc_image_path, 'aparc.schaefer400x7+aseg.mgz')
+    parc_schaefer1000x7_path = os.path.join(parc_image_path, 'aparc.schaefer1000x7+aseg.mgz')
+    parc_schaefer100x17_path = os.path.join(parc_image_path, 'aparc.schaefer100x17+aseg.mgz')
+    parc_schaefer200x17_path = os.path.join(parc_image_path, 'aparc.schaefer200x17+aseg.mgz')
+    parc_schaefer400x17_path = os.path.join(parc_image_path, 'aparc.schaefer400x17+aseg.mgz')
+    parc_schaefer1000x17_path = os.path.join(parc_image_path, 'aparc.schaefer1000x17+aseg.mgz')
+
 
     # surface mapping to hcp
     if not os.path.exists(parc_hcpmmp360_path):
@@ -45,44 +51,100 @@ def runSubject(freesurfer_dir, subject_label):
 
         subprocess.run(['mri_aparc2aseg --s ' + label + ' --old-ribbon --annot HCPMMP1 --o ' + parc_hcpmmp360_path], check=True, shell=True)
 
-    # surface mapping to schaefer100
-    if not os.path.exists(parc_schaefer100_path):    
+    # surface mapping to schaefer100x7
+    if not os.path.exists(parc_schaefer100x7_path):    
         for hemi in [ 'l', 'r' ]:
             subprocess.run(['mri_surf2surf --srcsubject fsaverage --trgsubject ' + label +
                 ' --hemi ' + hemi + 'h --sval-annot ' + 
                 '/' + hemi + 'h.Schaefer2018_100Parcels_7Networks_order.annot' + ' --tval ' + os.path.join(
-                freesurfer_path, 'label', hemi + 'h.schaefer100.annot')], check=True, shell=True)
+                freesurfer_path, 'label', hemi + 'h.schaefer100x7.annot')], check=True, shell=True)
 
-        subprocess.run(['mri_aparc2aseg --s ' + label + ' --old-ribbon --annot schaefer100 --o ' + parc_schaefer100_path], check=True, shell=True)
+        subprocess.run(['mri_aparc2aseg --s ' + label + ' --old-ribbon --annot schaefer100x7 --o ' + parc_schaefer100x7_path], check=True, shell=True)
 
-    # surface mapping to schaefer200
-    if not os.path.exists(parc_schaefer200_path):    
+    # surface mapping to schaefer100x17
+    if not os.path.exists(parc_schaefer100x17_path):    
+        for hemi in [ 'l', 'r' ]:
+            subprocess.run(['mri_surf2surf --srcsubject fsaverage --trgsubject ' + label +
+                ' --hemi ' + hemi + 'h --sval-annot ' + 
+                '/' + hemi + 'h.Schaefer2018_100Parcels_17Networks_order.annot' + ' --tval ' + os.path.join(
+                freesurfer_path, 'label', hemi + 'h.schaefer100x17.annot')], check=True, shell=True)
+
+        subprocess.run(['mri_aparc2aseg --s ' + label + ' --old-ribbon --annot schaefer100x17 --o ' + parc_schaefer100x17_path], check=True, shell=True)
+
+    # surface mapping to schaefer200x7
+    if not os.path.exists(parc_schaefer200x7_path):    
         for hemi in [ 'l', 'r' ]:
             subprocess.run(['mri_surf2surf --srcsubject fsaverage --trgsubject ' + label +
                 ' --hemi ' + hemi + 'h --sval-annot ' + 
                 '/' + hemi + 'h.Schaefer2018_200Parcels_7Networks_order.annot' + ' --tval ' + os.path.join(
-                freesurfer_path, 'label', hemi + 'h.schaefer200.annot')], check=True, shell=True)
+                freesurfer_path, 'label', hemi + 'h.schaefer200x7.annot')], check=True, shell=True)
 
-        subprocess.run(['mri_aparc2aseg --s ' + label + ' --old-ribbon --annot schaefer200 --o ' + parc_schaefer200_path], check=True, shell=True)
+        subprocess.run(['mri_aparc2aseg --s ' + label + ' --old-ribbon --annot schaefer200x7 --o ' + parc_schaefer200x7_path], check=True, shell=True)
+    
+    # surface mapping to schaefer200x17
+    if not os.path.exists(parc_schaefer200x17_path):    
+        for hemi in [ 'l', 'r' ]:
+            subprocess.run(['mri_surf2surf --srcsubject fsaverage --trgsubject ' + label +
+                ' --hemi ' + hemi + 'h --sval-annot ' + 
+                '/' + hemi + 'h.Schaefer2018_200Parcels_17Networks_order.annot' + ' --tval ' + os.path.join(
+                freesurfer_path, 'label', hemi + 'h.schaefer200x17.annot')], check=True, shell=True)
 
-    # surface mapping to schaefer400
-    if not os.path.exists(parc_schaefer400_path):    
+        subprocess.run(['mri_aparc2aseg --s ' + label + ' --old-ribbon --annot schaefer200x17 --o ' + parc_schaefer200x17_path], check=True, shell=True)
+
+    # surface mapping to schaefer400x7
+    if not os.path.exists(parc_schaefer400x7_path):    
         for hemi in [ 'l', 'r' ]:
             subprocess.run(['mri_surf2surf --srcsubject fsaverage --trgsubject ' + label +
                 ' --hemi ' + hemi + 'h --sval-annot ' + 
                 '/' + hemi + 'h.Schaefer2018_400Parcels_7Networks_order.annot' + ' --tval ' + os.path.join(
-                freesurfer_path, 'label', hemi + 'h.schaefer400.annot')], check=True, shell=True)
+                freesurfer_path, 'label', hemi + 'h.schaefer400x7.annot')], check=True, shell=True)
 
-        subprocess.run(['mri_aparc2aseg --s ' + label + ' --old-ribbon --annot schaefer400 --o ' + parc_schaefer400_path], check=True, shell=True)
+        subprocess.run(['mri_aparc2aseg --s ' + label + ' --old-ribbon --annot schaefer400x7 --o ' + parc_schaefer400x7_path], check=True, shell=True)
+
+    # surface mapping to schaefer400x17
+    if not os.path.exists(parc_schaefer400x17_path):    
+        for hemi in [ 'l', 'r' ]:
+            subprocess.run(['mri_surf2surf --srcsubject fsaverage --trgsubject ' + label +
+                ' --hemi ' + hemi + 'h --sval-annot ' + 
+                '/' + hemi + 'h.Schaefer2018_400Parcels_17Networks_order.annot' + ' --tval ' + os.path.join(
+                freesurfer_path, 'label', hemi + 'h.schaefer400x17.annot')], check=True, shell=True)
+
+        subprocess.run(['mri_aparc2aseg --s ' + label + ' --old-ribbon --annot schaefer400x17 --o ' + parc_schaefer400x17_path], check=True, shell=True)
+    
+    # surface mapping to schaefer1000x7
+    if not os.path.exists(parc_schaefer1000x7_path):    
+        for hemi in [ 'l', 'r' ]:
+            subprocess.run(['mri_surf2surf --srcsubject fsaverage --trgsubject ' + label +
+                ' --hemi ' + hemi + 'h --sval-annot ' + 
+                '/' + hemi + 'h.Schaefer2018_1000Parcels_7Networks_order.annot' + ' --tval ' + os.path.join(
+                freesurfer_path, 'label', hemi + 'h.schaefer1000x7.annot')], check=True, shell=True)
+
+        subprocess.run(['mri_aparc2aseg --s ' + label + ' --old-ribbon --annot schaefer1000x7 --o ' + parc_schaefer1000x7_path], check=True, shell=True)
+    
+
+    # surface mapping to schaefer1000x17
+    if not os.path.exists(parc_schaefer1000x17_path):    
+        for hemi in [ 'l', 'r' ]:
+            subprocess.run(['mri_surf2surf --srcsubject fsaverage --trgsubject ' + label +
+                ' --hemi ' + hemi + 'h --sval-annot ' + 
+                '/' + hemi + 'h.Schaefer2018_1000Parcels_17Networks_order.annot' + ' --tval ' + os.path.join(
+                freesurfer_path, 'label', hemi + 'h.schaefer1000x17.annot')], check=True, shell=True)
+
+        subprocess.run(['mri_aparc2aseg --s ' + label + ' --old-ribbon --annot schaefer1000x17 --o ' + parc_schaefer1000x17_path], check=True, shell=True)
 
 
     # convert from FreeSurfer Space Back to Native Anatomical Space (https://surfer.nmr.mgh.harvard.edu/fswiki/FsAnat-to-NativeAnat)
     parc_desikan_native_path = os.path.join(parc_image_path, 'native_desikan.mgz')
     parc_destrieux_native_path = os.path.join(parc_image_path, 'native_destrieux.mgz')
     parc_hcpmmp360_native_path = os.path.join(parc_image_path, 'native_hcpmmp360.mgz')
-    parc_schaefer100_native_path = os.path.join(parc_image_path, 'native_schaefer100.mgz')
-    parc_schaefer200_native_path = os.path.join(parc_image_path, 'native_schaefer200.mgz')
-    parc_schaefer400_native_path = os.path.join(parc_image_path, 'native_schaefer400.mgz')
+    parc_schaefer100x7_native_path = os.path.join(parc_image_path, 'native_schaefer100x7.mgz')
+    parc_schaefer200x7_native_path = os.path.join(parc_image_path, 'native_schaefer200x7.mgz')
+    parc_schaefer400x7_native_path = os.path.join(parc_image_path, 'native_schaefer400x7.mgz')
+    parc_schaefer1000x7_native_path = os.path.join(parc_image_path, 'native_schaefer1000x7.mgz')
+    parc_schaefer100x17_native_path = os.path.join(parc_image_path, 'native_schaefer100x17.mgz')
+    parc_schaefer200x17_native_path = os.path.join(parc_image_path, 'native_schaefer200x17.mgz')
+    parc_schaefer400x17_native_path = os.path.join(parc_image_path, 'native_schaefer400x17.mgz')
+    parc_schaefer1000x17_native_path = os.path.join(parc_image_path, 'native_schaefer1000x17.mgz')
 
     if not os.path.exists(parc_desikan_native_path):
         subprocess.run(['mri_label2vol  --seg ' + parc_desikan_path + ' --temp ' + 
@@ -93,15 +155,32 @@ def runSubject(freesurfer_dir, subject_label):
     if not os.path.exists(parc_hcpmmp360_native_path):
         subprocess.run(['mri_label2vol  --seg ' + parc_hcpmmp360_path + ' --temp ' + 
             os.path.join(parc_image_path, 'rawavg.mgz') + ' --o ' + parc_hcpmmp360_native_path + ' --regheader ' + parc_hcpmmp360_path], check=True, shell=True)
-    if not os.path.exists(parc_schaefer100_native_path):
-        subprocess.run(['mri_label2vol  --seg ' + parc_schaefer100_path + ' --temp ' + 
-            os.path.join(parc_image_path, 'rawavg.mgz') + ' --o ' + parc_schaefer100_native_path + ' --regheader ' + parc_schaefer100_path], check=True, shell=True)
-    if not os.path.exists(parc_schaefer200_native_path):
-        subprocess.run(['mri_label2vol  --seg ' + parc_schaefer200_path + ' --temp ' + 
-            os.path.join(parc_image_path, 'rawavg.mgz') + ' --o ' + parc_schaefer200_native_path + ' --regheader ' + parc_schaefer200_path], check=True, shell=True)
-    if not os.path.exists(parc_schaefer400_native_path):
-        subprocess.run(['mri_label2vol  --seg ' + parc_schaefer400_path + ' --temp ' + 
-            os.path.join(parc_image_path, 'rawavg.mgz') + ' --o ' + parc_schaefer400_native_path + ' --regheader ' + parc_schaefer400_path], check=True, shell=True)
+        
+    if not os.path.exists(parc_schaefer100x7_native_path):
+        subprocess.run(['mri_label2vol  --seg ' + parc_schaefer100x7_path + ' --temp ' + 
+            os.path.join(parc_image_path, 'rawavg.mgz') + ' --o ' + parc_schaefer100x7_native_path + ' --regheader ' + parc_schaefer100x7_path], check=True, shell=True)
+    if not os.path.exists(parc_schaefer200x7_native_path):
+        subprocess.run(['mri_label2vol  --seg ' + parc_schaefer200x7_path + ' --temp ' + 
+            os.path.join(parc_image_path, 'rawavg.mgz') + ' --o ' + parc_schaefer200x7_native_path + ' --regheader ' + parc_schaefer200x7_path], check=True, shell=True)
+    if not os.path.exists(parc_schaefer400x7_native_path):
+        subprocess.run(['mri_label2vol  --seg ' + parc_schaefer400x7_path + ' --temp ' + 
+            os.path.join(parc_image_path, 'rawavg.mgz') + ' --o ' + parc_schaefer400x7_native_path + ' --regheader ' + parc_schaefer400x7_path], check=True, shell=True)
+    if not os.path.exists(parc_schaefer1000x7_native_path):
+        subprocess.run(['mri_label2vol  --seg ' + parc_schaefer1000x7_path + ' --temp ' + 
+            os.path.join(parc_image_path, 'rawavg.mgz') + ' --o ' + parc_schaefer1000x7_native_path + ' --regheader ' + parc_schaefer1000x7_path], check=True, shell=True)
+    
+    if not os.path.exists(parc_schaefer100x17_native_path):
+        subprocess.run(['mri_label2vol  --seg ' + parc_schaefer100x17_path + ' --temp ' + 
+            os.path.join(parc_image_path, 'rawavg.mgz') + ' --o ' + parc_schaefer100x17_native_path + ' --regheader ' + parc_schaefer100x17_path], check=True, shell=True)
+    if not os.path.exists(parc_schaefer200x17_native_path):
+        subprocess.run(['mri_label2vol  --seg ' + parc_schaefer200x17_path + ' --temp ' + 
+            os.path.join(parc_image_path, 'rawavg.mgz') + ' --o ' + parc_schaefer200x17_native_path + ' --regheader ' + parc_schaefer200x17_path], check=True, shell=True)
+    if not os.path.exists(parc_schaefer400x17_native_path):
+        subprocess.run(['mri_label2vol  --seg ' + parc_schaefer400x17_path + ' --temp ' + 
+            os.path.join(parc_image_path, 'rawavg.mgz') + ' --o ' + parc_schaefer400x17_native_path + ' --regheader ' + parc_schaefer400x17_path], check=True, shell=True)
+    if not os.path.exists(parc_schaefer1000x17_native_path):
+        subprocess.run(['mri_label2vol  --seg ' + parc_schaefer1000x17_path + ' --temp ' + 
+            os.path.join(parc_image_path, 'rawavg.mgz') + ' --o ' + parc_schaefer1000x17_native_path + ' --regheader ' + parc_schaefer1000x17_path], check=True, shell=True)
 
     print('Finished participant-level analysis for subject \'' + label + '\'')
     

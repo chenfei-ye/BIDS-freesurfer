@@ -68,9 +68,14 @@ docker run -it --rm -v /input_bids_directory:/bids_dataset -v /input_bids_direct
 ## Output explanation
 -  Default output directory: `bids_root/derivatives/freesurfer/sub-XX`
 -  HCPMMP output directory: `bids_root/derivatives/freesurfer/sub-XX/mri/native_hcpmmp360.mgz` 
--  Schaefer100 output directory: `bids_root/derivatives/freesurfer/sub-XX/mri/native_schaefer100.mgz` 
--  Schaefer200 output directory: `bids_root/derivatives/freesurfer/sub-XX/mri/native_schaefer200.mgz` 
--  Schaefer400 output directory: `bids_root/derivatives/freesurfer/sub-XX/mri/native_schaefer400.mgz` 
+-  Schaefer100x7 output directory: `bids_root/derivatives/freesurfer/sub-XX/mri/native_schaefer100x7.mgz` 
+-  Schaefer200x7 output directory: `bids_root/derivatives/freesurfer/sub-XX/mri/native_schaefer200x7.mgz` 
+-  Schaefer400x7 output directory: `bids_root/derivatives/freesurfer/sub-XX/mri/native_schaefer400x7.mgz` 
+-  Schaefer1000x7 output directory: `bids_root/derivatives/freesurfer/sub-XX/mri/native_schaefer1000x7.mgz` 
+-  Schaefer100x17 output directory: `bids_root/derivatives/freesurfer/sub-XX/mri/native_schaefer100x17.mgz` 
+-  Schaefer200x17 output directory: `bids_root/derivatives/freesurfer/sub-XX/mri/native_schaefer200x17.mgz` 
+-  Schaefer400x17 output directory: `bids_root/derivatives/freesurfer/sub-XX/mri/native_schaefer400x17.mgz` 
+-  Schaefer1000x17 output directory: `bids_root/derivatives/freesurfer/sub-XX/mri/native_schaefer1000x17.mgz` 
 -  morphological metrics output directory: `input_bids_directory/derivatives/freesurfer/00_group2_stats_tables/`, including: 
 	-   `lh.aparc.thickness.tsv`  cortical thickness
 	-   `aseg.tsv`  subcortical volume

@@ -4,10 +4,14 @@
 - `desikan_T1w`：Desikan-Killiany Atlas (?h.aparc.annot) included inside FreeSurfer
 - `destrieux_T1w`: Destrieux Atlas (?h.aparc.a2009s.annot) Atlas (?h.aparc.annot) included inside FreeSurfer
 - `hcpmmp_T1w` : HCP-MMP1.0 parcellation by [Glasser et al. (Nature)](http://www.nature.com/nature/journal/v536/n7615/full/nature18933.html). See details [here](https://cjneurolab.org/2016/11/22/hcp-mmp1-0-volumetric-nifti-masks-in-native-structural-space/).
--   `schaefer100_T1w`: Multiscale local-global functional atlas from Schaefer and colleagues: 100-node resolution
--   `schaefer200_T1w`: Multiscale local-global functional atlas from Schaefer and colleagues: 200-node resolution
--   `schaefer400_T1w`: Multiscale local-global functional atlas from Schaefer and colleagues: 400-node resolution
-
+-   `schaefer100x7_T1w`: Multiscale local-global functional atlas from Schaefer and colleagues: 100-node resolution with 7 networks
+-   `schaefer200x7_T1w`: Multiscale local-global functional atlas from Schaefer and colleagues: 200-node resolution with 7 networks
+-   `schaefer400x7_T1w`: Multiscale local-global functional atlas from Schaefer and colleagues: 400-node resolution with 7 networks
+-   `schaefer1000x7_T1w`: Multiscale local-global functional atlas from Schaefer and colleagues: 1000-node resolution with 7 networks
+-   `schaefer100x17_T1w`: Multiscale local-global functional atlas from Schaefer and colleagues: 100-node resolution with 17 networks
+-   `schaefer200x17_T1w`: Multiscale local-global functional atlas from Schaefer and colleagues: 200-node resolution with 17 networks
+-   `schaefer400x17_T1w`: Multiscale local-global functional atlas from Schaefer and colleagues: 400-node resolution with 17 networks
+-   `schaefer1000x17_T1w`: Multiscale local-global functional atlas from Schaefer and colleagues: 1000-node resolution with 17 networks
 
 ## Reference
 [An automated labeling system for subdividing the human cerebral cortex on MRI scans into gyral based regions of interest](https://surfer.nmr.mgh.harvard.edu/ftp/articles/desikan06-parcellation.pdf), Desikan et al., (2006).  [NeuroImage](https://surfer.nmr.mgh.harvard.edu/fswiki/NeuroImage), 31(3):968-80.
