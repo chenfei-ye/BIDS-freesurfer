@@ -128,8 +128,11 @@ if __name__ == "__main__":
 
     # check if freesurfer has been finished for some subjects
     os.environ["SUBJECTS_DIR"] = args.output_dir
-    subject_done_dirs = glob.glob(os.path.join(args.output_dir, "sub-*"))
-    subjects_already_done = [subject_dir.split("-")[-1] for subject_dir in subject_done_dirs]
+    subject_done_dirs = glob.glob(os.path.join(args.output_dir, "sub-*", 'mri', 'aparc.DKTatlas+aseg.mgz'))
+    subjects_already_done = [subject_dir[:-28].split("-")[-1] for subject_dir in subject_done_dirs]
+    if subjects_already_done:
+        print('The following cases have been successfully processed, will jump them:')
+        print(' '.join(subjects_already_done))
     subjects_to_analyze = list(set(subjects_to_analyze) - set(subjects_already_done))
     subjects_to_analyze.sort()
     print("subjects_to_analyze: ", subjects_to_analyze)

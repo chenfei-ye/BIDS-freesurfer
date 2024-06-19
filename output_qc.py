@@ -54,15 +54,20 @@ if __name__ == "__main__":
     subjects_to_analyze.sort()
 
     failed_ls = []
+    success_ls = []
     # find all T1s and skullstrip them
     for subject_label in subjects_to_analyze:
         qc_fail = runSubject(freesurfer_dir, subject_label)
         if qc_fail:
             failed_ls.append(subject_label)
+        else:
+            success_ls.append(subject_label)
     
     if failed_ls:
         print('Failed freesurfer output detected for the following cases:')
         print(','.join(failed_ls))
+        print('Successful freesurfer output for the following cases:')
+        print(','.join(success_ls))
     else:
         print('Great! No failed freesurfer output detected')
 
