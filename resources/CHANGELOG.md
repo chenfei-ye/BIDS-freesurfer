@@ -1,5 +1,8 @@
 ## Master
-* Release v1.6
+* Release v1.7
+
+## Release v1.7
+* added output_qc.py
 
 ## Release v1.6
 * added Schaefer1000x7 and  Schaefer1000x17 atlas

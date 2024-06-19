@@ -7,6 +7,7 @@
 - mapping to [HCPMMP atlas](https://cjneurolab.org/2016/11/22/hcp-mmp1-0-volumetric-nifti-masks-in-native-structural-space/)
 - mapping to [Schaefer atlas](https://github.com/ThomasYeoLab/CBIG/tree/master/stable_projects/brain_parcellation/Schaefer2018_LocalGlobal/Parcellations/project_to_individual)
 - morphological metrics extraction (e.g., cortical thickness, subcortical volume, euler number)
+- output integrity QC
 
 This pipeline was modified from [https://github.com/BIDS-Apps/freesurfer](https://github.com/BIDS-Apps/freesurfer).
 
@@ -51,6 +52,11 @@ docker run -it --rm --entrypoint python -v /input_bids_directory:/bids_dataset -
 ### morphological metrics extraction
 ```
 docker run -it --rm -v /input_bids_directory:/bids_dataset -v /input_bids_directory/derivatives/freesurfer:/outputs -v <localpath>/freesurfer_license.txt:/license.txt  bids-freesurfer:latest /bids_dataset /outputs group2 --license_file "/license.txt"
+```
+
+### output integrity QC
+```
+docker run -it --rm --entrypoint python -v /input_bids_directory:/bids_dataset bids-freesurfer:latest /output_qc.py /bids_dataset 
 ```
 
 ## Input Argument
