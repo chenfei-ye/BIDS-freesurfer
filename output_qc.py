@@ -1,7 +1,8 @@
 # coding:utf8
 # Authere: Chenfei 
-# update Date:2024/06/19
-# version: output_qc:v1.0
+# update Date:2024/08/04
+# update: fmriprep and xcp-d qc added 
+# version: output_qc:v1.1
 # funcion: check integrity of freesurfer output
 
 
@@ -17,37 +18,57 @@ import shutil
 import glob
 
 
-def runSubject(freesurfer_dir, subject_label):
+def runSubject(output_dir, subject_label, mode):
     qc_fail=False
     label = 'sub-' + subject_label
-    freesurfer_path = os.path.join(freesurfer_dir, label)
-    if not os.path.exists(freesurfer_path):
+    output_path = os.path.join(output_dir, label)
+    if not os.path.exists(output_path):
         qc_fail=True
     else:
-        parc_image_path = os.path.join(freesurfer_path, 'mri') 
-        parc_DKT_path = os.path.join(parc_image_path, 'aparc.DKTatlas+aseg.mgz')
-        if not os.path.exists(parc_DKT_path):
-            qc_fail=True
+        if mode == 'freesurfer':
+            parc_image_path = os.path.join(output_path, 'mri') 
+            key_file_path = os.path.join(parc_image_path, 'aparc.DKTatlas+aseg.mgz')
+            if not os.path.exists(key_file_path):
+                qc_fail=True
+        elif mode == 'fmriprep':
+            den91k_path = glob.glob(os.path.join(output_path, 'func', '*_space-fsLR_den-91k_bold.dtseries.nii'))
+            if len(den91k_path) == 0:
+                qc_fail=True
+        elif mode == 'xcp-d':
+            den91k_path = glob.glob(os.path.join(output_path, 'func', '*_space-fsLR_seg-4S456Parcels_den-91k_stat-coverage_boldmap.pscalar.nii'))
+            if len(den91k_path) == 0:
+                qc_fail=True
     return qc_fail
 
 
 # main function
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser(description='check integrity of freesurfer output')
+    parser = argparse.ArgumentParser(description='check integrity of freesurfer/fmriprep/xcp-d output')
     parser.add_argument('bids_dir', help='The directory with the input dataset '
                         'formatted according to the BIDS standard.')
-    
+    parser.add_argument('-mode', help='run freesurfer/fmriprep/xcp-d mode', default="freesurfer",
+                        choices=['freesurfer', 'fmriprep', 'xcp-d'])
 
     args = parser.parse_args()
 
     start = time.time()
 
-
+    mode = args.mode
     subjects_to_analyze = []
-    freesurfer_dir = os.path.join(args.bids_dir, 'derivatives', 'freesurfer')
-    if not os.path.exists(freesurfer_dir):
-        raise('Unable to find /derivatives/freesurfer')
+
+    if mode == 'freesurfer':
+        output_dir = os.path.join(args.bids_dir, 'derivatives', 'freesurfer')
+        if not os.path.exists(output_dir):
+            raise('Unable to find /derivatives/freesurfer')
+    elif mode == 'fmriprep':
+        output_dir = os.path.join(args.bids_dir, 'derivatives', 'fmriprep')
+        if not os.path.exists(output_dir):
+            raise('Unable to find /derivatives/fmriprep')
+    elif mode == 'xcp-d':
+        output_dir = os.path.join(args.bids_dir, 'derivatives', 'xcp_d')
+        if not os.path.exists(output_dir):
+            raise('Unable to find /derivatives/xcp_d')
     
     subject_dirs = glob.glob(os.path.join(args.bids_dir, "sub-*"))
     subjects_to_analyze = [subject_dir.split("-")[-1] for subject_dir in subject_dirs]
@@ -55,21 +76,22 @@ if __name__ == "__main__":
 
     failed_ls = []
     success_ls = []
-    # find all T1s and skullstrip them
+
+    # find all image 
     for subject_label in subjects_to_analyze:
-        qc_fail = runSubject(freesurfer_dir, subject_label)
+        qc_fail = runSubject(output_dir, subject_label, mode)
         if qc_fail:
             failed_ls.append(subject_label)
         else:
             success_ls.append(subject_label)
     
     if failed_ls:
-        print('Failed freesurfer output detected for the following cases:')
-        print(','.join(failed_ls))
-        print('Successful freesurfer output for the following cases:')
-        print(','.join(success_ls))
+        print('Failed ' + mode + ' output detected for the following cases:')
+        print(' '.join(failed_ls))
     else:
-        print('Great! No failed freesurfer output detected')
+        print('Great! No failed ' + mode + ' output detected')
+    print('Successful ' + mode + ' output for the following cases:')
+    print(' '.join(success_ls))
 
     end = time.time()
     running_time = end - start
