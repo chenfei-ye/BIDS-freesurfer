@@ -245,21 +245,21 @@ if __name__ == "__main__":
             print('running participant level analysis for subject ' + subject_label)
             smri = [f.path for f in layout.get(subject=subject_label,suffix='T1w',extension=["nii.gz", "nii"],**session_to_analyze)]      
 
-        if os.path.normpath(smri[0]).split(os.sep)[-3].split("-")[0] == 'ses':
-            sessions = [os.path.normpath(t1).split(os.sep)[-3].split("-")[-1] for t1 in smri]
-            sessions.sort()
-        else:
-            sessions = []
+            if os.path.normpath(smri[0]).split(os.sep)[-3].split("-")[0] == 'ses':
+                sessions = [os.path.normpath(t1).split(os.sep)[-3].split("-")[-1] for t1 in smri]
+                sessions.sort()
+            else:
+                sessions = []
 
-        if sessions:
-            for s in range(len(sessions)):  
-                session_label = sessions[s]
-                subject_id = 'sub-' + subject_label + '_ses-' + session_label
+            if sessions:
+                for s in range(len(sessions)):  
+                    session_label = sessions[s]
+                    subject_id = 'sub-' + subject_label + '_ses-' + session_label
+                    runSubject(freesurfer_dir, subject_id)
+            else:
+                session_label = []
+                subject_id = 'sub-' + subject_label 
                 runSubject(freesurfer_dir, subject_id)
-        else:
-            session_label = []
-            subject_id = 'sub-' + subject_label 
-            runSubject(freesurfer_dir, subject_id)
 
 
     end = time.time()
