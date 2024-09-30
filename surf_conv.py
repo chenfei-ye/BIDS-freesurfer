@@ -1,7 +1,8 @@
 # coding:utf8
 # Authere: Chenfei 
-# update Date:2024/02/02
-# version: surf_conv:v1.1
+# update Date:2024/09/30
+# version: surf_conv:v1.2
+# update: support session for parallel computation
 # update: added Schaeferx7 and Schaeferx17 atlas
 # https://github.com/ThomasYeoLab/CBIG/tree/master/stable_projects/brain_parcellation/Schaefer2018_LocalGlobal/Parcellations/project_to_individual
 
@@ -17,12 +18,14 @@ import time
 import subprocess
 import shutil
 import glob
+import bids
 
 
-def runSubject(freesurfer_dir, subject_label):
-    label = 'sub-' + subject_label
+def runSubject(freesurfer_dir, subject_id):
+    label = subject_id
     freesurfer_path = os.path.join(freesurfer_dir, label)
     if not os.path.exists(freesurfer_path):
+        print('subject-level freesurfer dir: ' + freesurfer_path)
         raise("Failed to detect /derivatives/freesurfer for subject " + label)
     
     os.environ["SUBJECTS_DIR"] = freesurfer_dir
@@ -201,7 +204,12 @@ if __name__ == "__main__":
                         'provided all subjects should be analyzed. Multiple '
                         'participants can be specified with a space separated list.',
                         nargs="+")
-    
+    parser.add_argument('--session_label', help='The label of the session that should be analyzed. The label '
+                    'corresponds to ses-<session_label> from the BIDS spec '
+                    '(so it does not include "ses-"). If this parameter is not '
+                    'provided, all sessions should be analyzed. Multiple '
+                    'sessions can be specified with a space separated list.',
+                    nargs="+")
 
     args = parser.parse_args()
 
@@ -222,14 +230,37 @@ if __name__ == "__main__":
         subject_dirs = glob.glob(os.path.join(args.bids_dir, "sub-*"))
         subjects_to_analyze = [subject_dir.split("-")[-1] for subject_dir in subject_dirs]
     subjects_to_analyze.sort()
+
+    # only use a subset of sessions
+    if args.session_label:
+        session_to_analyze = dict(session=args.session_label)
+    else:
+        session_to_analyze = dict()
             
-        
+    layout = bids.layout.BIDSLayout(args.bids_dir, derivatives=False, absolute_paths=True)    
     # running participant level
     if args.analysis_level == "participant":
         # find all T1s and skullstrip them
         for subject_label in subjects_to_analyze:
             print('running participant level analysis for subject ' + subject_label)
-            runSubject(freesurfer_dir, subject_label)
+            smri = [f.path for f in layout.get(subject=subject_label,suffix='T1w',extension=["nii.gz", "nii"],**session_to_analyze)]      
+
+        if os.path.normpath(smri[0]).split(os.sep)[-3].split("-")[0] == 'ses':
+            sessions = [os.path.normpath(t1).split(os.sep)[-3].split("-")[-1] for t1 in smri]
+            sessions.sort()
+        else:
+            sessions = []
+
+        if sessions:
+            for s in range(len(sessions)):  
+                session_label = sessions[s]
+                subject_id = 'sub-' + subject_label + '_ses-' + session_label
+                runSubject(freesurfer_dir, subject_id)
+        else:
+            session_label = []
+            subject_id = 'sub-' + subject_label 
+            runSubject(freesurfer_dir, subject_id)
+
 
     end = time.time()
     running_time = end - start
