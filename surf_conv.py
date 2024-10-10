@@ -21,12 +21,21 @@ import glob
 import bids
 
 
-def runSubject(freesurfer_dir, subject_id):
-    label = subject_id
-    freesurfer_path = os.path.join(freesurfer_dir, label)
+def runSubject(freesurfer_dir, label, session_label):
+    if session_label:
+        subject_label_final = 'sub-' + label + '_ses-' + session_label
+        freesurfer_path = os.path.join(args.bids_dir, 'derivatives', 'freesurfer', 'sub-' + label + '_ses-' + session_label)
+        if not os.path.exists(freesurfer_path):
+            freesurfer_nosession_path = os.path.join(args.bids_dir, 'derivatives', 'freesurfer', 'sub-' + label)
+            print("Failed to detect freesurfer_path: " + freesurfer_path + ' Try to search ' + freesurfer_nosession_path)
+            freesurfer_path = freesurfer_nosession_path
+            subject_label_final = 'sub-' + label 
+    else:
+        freesurfer_path = os.path.join(args.bids_dir, 'derivatives', 'freesurfer', 'sub-' + label)
+        subject_label_final = 'sub-' + label 
     if not os.path.exists(freesurfer_path):
-        print('subject-level freesurfer dir: ' + freesurfer_path)
-        raise("Failed to detect /derivatives/freesurfer for subject " + label)
+        print("Failed to detect freesurfer_path: " + freesurfer_path)
+
     
     os.environ["SUBJECTS_DIR"] = freesurfer_dir
     parc_image_path = os.path.join(freesurfer_path, 'mri') 
@@ -47,93 +56,93 @@ def runSubject(freesurfer_dir, subject_id):
     # surface mapping to hcp
     if not os.path.exists(parc_hcpmmp360_path):
         for hemi in [ 'l', 'r' ]:
-            subprocess.run(['mri_surf2surf --srcsubject fsaverage --trgsubject ' + label +
+            subprocess.run(['mri_surf2surf --srcsubject fsaverage --trgsubject ' + subject_label_final +
                 ' --hemi ' + hemi + 'h --sval-annot ' + 
                 '/' + hemi + 'h.HCPMMP1.annot' + ' --tval ' + os.path.join(
                 freesurfer_path, 'label', hemi + 'h.HCPMMP1.annot')], check=True, shell=True)
 
-        subprocess.run(['mri_aparc2aseg --s ' + label + ' --old-ribbon --annot HCPMMP1 --o ' + parc_hcpmmp360_path], check=True, shell=True)
+        subprocess.run(['mri_aparc2aseg --s ' + subject_label_final + ' --old-ribbon --annot HCPMMP1 --o ' + parc_hcpmmp360_path], check=True, shell=True)
 
     # surface mapping to schaefer100x7
     if not os.path.exists(parc_schaefer100x7_path):    
         for hemi in [ 'l', 'r' ]:
-            subprocess.run(['mri_surf2surf --srcsubject fsaverage --trgsubject ' + label +
+            subprocess.run(['mri_surf2surf --srcsubject fsaverage --trgsubject ' + subject_label_final +
                 ' --hemi ' + hemi + 'h --sval-annot ' + 
                 '/' + hemi + 'h.Schaefer2018_100Parcels_7Networks_order.annot' + ' --tval ' + os.path.join(
                 freesurfer_path, 'label', hemi + 'h.schaefer100x7.annot')], check=True, shell=True)
 
-        subprocess.run(['mri_aparc2aseg --s ' + label + ' --old-ribbon --annot schaefer100x7 --o ' + parc_schaefer100x7_path], check=True, shell=True)
+        subprocess.run(['mri_aparc2aseg --s ' + subject_label_final + ' --old-ribbon --annot schaefer100x7 --o ' + parc_schaefer100x7_path], check=True, shell=True)
 
     # surface mapping to schaefer100x17
     if not os.path.exists(parc_schaefer100x17_path):    
         for hemi in [ 'l', 'r' ]:
-            subprocess.run(['mri_surf2surf --srcsubject fsaverage --trgsubject ' + label +
+            subprocess.run(['mri_surf2surf --srcsubject fsaverage --trgsubject ' + subject_label_final +
                 ' --hemi ' + hemi + 'h --sval-annot ' + 
                 '/' + hemi + 'h.Schaefer2018_100Parcels_17Networks_order.annot' + ' --tval ' + os.path.join(
                 freesurfer_path, 'label', hemi + 'h.schaefer100x17.annot')], check=True, shell=True)
 
-        subprocess.run(['mri_aparc2aseg --s ' + label + ' --old-ribbon --annot schaefer100x17 --o ' + parc_schaefer100x17_path], check=True, shell=True)
+        subprocess.run(['mri_aparc2aseg --s ' + subject_label_final + ' --old-ribbon --annot schaefer100x17 --o ' + parc_schaefer100x17_path], check=True, shell=True)
 
     # surface mapping to schaefer200x7
     if not os.path.exists(parc_schaefer200x7_path):    
         for hemi in [ 'l', 'r' ]:
-            subprocess.run(['mri_surf2surf --srcsubject fsaverage --trgsubject ' + label +
+            subprocess.run(['mri_surf2surf --srcsubject fsaverage --trgsubject ' + subject_label_final +
                 ' --hemi ' + hemi + 'h --sval-annot ' + 
                 '/' + hemi + 'h.Schaefer2018_200Parcels_7Networks_order.annot' + ' --tval ' + os.path.join(
                 freesurfer_path, 'label', hemi + 'h.schaefer200x7.annot')], check=True, shell=True)
 
-        subprocess.run(['mri_aparc2aseg --s ' + label + ' --old-ribbon --annot schaefer200x7 --o ' + parc_schaefer200x7_path], check=True, shell=True)
+        subprocess.run(['mri_aparc2aseg --s ' + subject_label_final + ' --old-ribbon --annot schaefer200x7 --o ' + parc_schaefer200x7_path], check=True, shell=True)
     
     # surface mapping to schaefer200x17
     if not os.path.exists(parc_schaefer200x17_path):    
         for hemi in [ 'l', 'r' ]:
-            subprocess.run(['mri_surf2surf --srcsubject fsaverage --trgsubject ' + label +
+            subprocess.run(['mri_surf2surf --srcsubject fsaverage --trgsubject ' + subject_label_final +
                 ' --hemi ' + hemi + 'h --sval-annot ' + 
                 '/' + hemi + 'h.Schaefer2018_200Parcels_17Networks_order.annot' + ' --tval ' + os.path.join(
                 freesurfer_path, 'label', hemi + 'h.schaefer200x17.annot')], check=True, shell=True)
 
-        subprocess.run(['mri_aparc2aseg --s ' + label + ' --old-ribbon --annot schaefer200x17 --o ' + parc_schaefer200x17_path], check=True, shell=True)
+        subprocess.run(['mri_aparc2aseg --s ' + subject_label_final + ' --old-ribbon --annot schaefer200x17 --o ' + parc_schaefer200x17_path], check=True, shell=True)
 
     # surface mapping to schaefer400x7
     if not os.path.exists(parc_schaefer400x7_path):    
         for hemi in [ 'l', 'r' ]:
-            subprocess.run(['mri_surf2surf --srcsubject fsaverage --trgsubject ' + label +
+            subprocess.run(['mri_surf2surf --srcsubject fsaverage --trgsubject ' + subject_label_final +
                 ' --hemi ' + hemi + 'h --sval-annot ' + 
                 '/' + hemi + 'h.Schaefer2018_400Parcels_7Networks_order.annot' + ' --tval ' + os.path.join(
                 freesurfer_path, 'label', hemi + 'h.schaefer400x7.annot')], check=True, shell=True)
 
-        subprocess.run(['mri_aparc2aseg --s ' + label + ' --old-ribbon --annot schaefer400x7 --o ' + parc_schaefer400x7_path], check=True, shell=True)
+        subprocess.run(['mri_aparc2aseg --s ' + subject_label_final + ' --old-ribbon --annot schaefer400x7 --o ' + parc_schaefer400x7_path], check=True, shell=True)
 
     # surface mapping to schaefer400x17
     if not os.path.exists(parc_schaefer400x17_path):    
         for hemi in [ 'l', 'r' ]:
-            subprocess.run(['mri_surf2surf --srcsubject fsaverage --trgsubject ' + label +
+            subprocess.run(['mri_surf2surf --srcsubject fsaverage --trgsubject ' + subject_label_final +
                 ' --hemi ' + hemi + 'h --sval-annot ' + 
                 '/' + hemi + 'h.Schaefer2018_400Parcels_17Networks_order.annot' + ' --tval ' + os.path.join(
                 freesurfer_path, 'label', hemi + 'h.schaefer400x17.annot')], check=True, shell=True)
 
-        subprocess.run(['mri_aparc2aseg --s ' + label + ' --old-ribbon --annot schaefer400x17 --o ' + parc_schaefer400x17_path], check=True, shell=True)
+        subprocess.run(['mri_aparc2aseg --s ' + subject_label_final + ' --old-ribbon --annot schaefer400x17 --o ' + parc_schaefer400x17_path], check=True, shell=True)
     
     # surface mapping to schaefer1000x7
     if not os.path.exists(parc_schaefer1000x7_path):    
         for hemi in [ 'l', 'r' ]:
-            subprocess.run(['mri_surf2surf --srcsubject fsaverage --trgsubject ' + label +
+            subprocess.run(['mri_surf2surf --srcsubject fsaverage --trgsubject ' + subject_label_final +
                 ' --hemi ' + hemi + 'h --sval-annot ' + 
                 '/' + hemi + 'h.Schaefer2018_1000Parcels_7Networks_order.annot' + ' --tval ' + os.path.join(
                 freesurfer_path, 'label', hemi + 'h.schaefer1000x7.annot')], check=True, shell=True)
 
-        subprocess.run(['mri_aparc2aseg --s ' + label + ' --old-ribbon --annot schaefer1000x7 --o ' + parc_schaefer1000x7_path], check=True, shell=True)
+        subprocess.run(['mri_aparc2aseg --s ' + subject_label_final + ' --old-ribbon --annot schaefer1000x7 --o ' + parc_schaefer1000x7_path], check=True, shell=True)
     
 
     # surface mapping to schaefer1000x17
     if not os.path.exists(parc_schaefer1000x17_path):    
         for hemi in [ 'l', 'r' ]:
-            subprocess.run(['mri_surf2surf --srcsubject fsaverage --trgsubject ' + label +
+            subprocess.run(['mri_surf2surf --srcsubject fsaverage --trgsubject ' + subject_label_final +
                 ' --hemi ' + hemi + 'h --sval-annot ' + 
                 '/' + hemi + 'h.Schaefer2018_1000Parcels_17Networks_order.annot' + ' --tval ' + os.path.join(
                 freesurfer_path, 'label', hemi + 'h.schaefer1000x17.annot')], check=True, shell=True)
 
-        subprocess.run(['mri_aparc2aseg --s ' + label + ' --old-ribbon --annot schaefer1000x17 --o ' + parc_schaefer1000x17_path], check=True, shell=True)
+        subprocess.run(['mri_aparc2aseg --s ' + subject_label_final + ' --old-ribbon --annot schaefer1000x17 --o ' + parc_schaefer1000x17_path], check=True, shell=True)
 
 
     # convert from FreeSurfer Space Back to Native Anatomical Space (https://surfer.nmr.mgh.harvard.edu/fswiki/FsAnat-to-NativeAnat)
@@ -185,7 +194,7 @@ def runSubject(freesurfer_dir, subject_id):
         subprocess.run(['mri_label2vol  --seg ' + parc_schaefer1000x17_path + ' --temp ' + 
             os.path.join(parc_image_path, 'rawavg.mgz') + ' --o ' + parc_schaefer1000x17_native_path + ' --regheader ' + parc_schaefer1000x17_path], check=True, shell=True)
 
-    print('Finished participant-level analysis for subject \'' + label + '\'')
+    print('Finished participant-level analysis for subject \'' + subject_label_final + '\'')
     
 
 # main function
@@ -254,12 +263,10 @@ if __name__ == "__main__":
             if sessions:
                 for s in range(len(sessions)):  
                     session_label = sessions[s]
-                    subject_id = 'sub-' + subject_label + '_ses-' + session_label
-                    runSubject(freesurfer_dir, subject_id)
+                    runSubject(freesurfer_dir, subject_label, session_label)
             else:
                 session_label = []
-                subject_id = 'sub-' + subject_label 
-                runSubject(freesurfer_dir, subject_id)
+                runSubject(freesurfer_dir, subject_label, session_label)
 
 
     end = time.time()
